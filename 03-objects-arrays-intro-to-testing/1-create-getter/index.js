@@ -10,9 +10,7 @@ export function createGetter(path) {
 		// function getter checks the keys recursively
 		function getter(value) {
         	const key = keys.next();
-        	return (key.done) ? value : // last key reached, return value
-          		   (Object.keys(value).includes(key.value)) ? getter(value[key.value]) :  // key exists, continue recursion
-          		   											  value[key.value];			  // key doesn't exist, return 'undefined'
+        	return (value === undefined || key.done) ? value : getter(value[key.value]); 
 		}
         return getter(obj);
 	}
