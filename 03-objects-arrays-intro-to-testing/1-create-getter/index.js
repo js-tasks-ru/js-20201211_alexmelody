@@ -5,13 +5,9 @@
  */
 export function createGetter(path) {
 	const keys = path.split('.')[Symbol.iterator](); // iterator for keys in the path
-
-	return function(obj) {
-		// function getter checks the keys recursively
-		function getter(value) {
-        	const key = keys.next();
-        	return (value === undefined || key.done) ? value : getter(value[key.value]); 
-		}
-        return getter(obj);
+	
+	return function getter(obj) {  // function getter checks the keys recursively
+        const key = keys.next();
+        return (obj === undefined || key.done) ? obj : getter(obj[key.value]); 
 	}
 }
