@@ -7,7 +7,7 @@ export function createGetter(path) {
 	const keys = path.split('.')[Symbol.iterator](); // iterator for keys in the path
 	
 	return function getter(obj) {  // function getter checks the keys recursively
-        const key = keys.next();
-        return (obj === undefined || key.done) ? obj : getter(obj[key.value]); 
+        const [property, pathEnd] = Object.values(keys.next());
+        return (obj === undefined || pathEnd) ? obj : getter(obj[property]); 
 	}
 }
