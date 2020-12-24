@@ -5,5 +5,9 @@
  * @returns {string} - the new string without extra symbols according passed size
  */
 export function trimSymbols(string, size) {
-
+	let startIndex = 0;
+	return (size === undefined) ? string : string.split('').map((letter, currentIndex, letters) => { 
+		if (letter !== letters[startIndex]) { startIndex = currentIndex; }
+        return ( currentIndex - startIndex < size ) ? letter : '';
+	}).join('');
 }
