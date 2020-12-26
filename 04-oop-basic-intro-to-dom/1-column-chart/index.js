@@ -74,7 +74,7 @@ export default class ColumnChart {
   }
 
   update(newData = []) {
-    this.data = newData;  // also update the property "data" that is used in getChartColumn
+    this.data = newData;  // update the property "data" which is used in getChartColumn
     this.childElements.body.innerHTML = this.getChartColumn();
   }
 
