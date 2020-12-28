@@ -30,21 +30,21 @@ export default class NotificationMessage {
     }
 
     show(target = document.body) {
-        if (!this.notificationExists(target)) {
+        if ( !this.notificationExists ) {
             target.append(this.element);
             NotificationMessage.exist[this.type] = true; // set notification existance flag for the specified message type
             setTimeout(() => this.remove(), this.duration);
         }
     }
 
-    notificationExists(target) {
+    get notificationExists() {
         return Boolean(NotificationMessage.exist[this.type]); // check if notification with specified type already exists
     }
 
     remove() {
         NotificationMessage.exist[this.type] = false; // reset notification existance flag
 
-        if (this.element) {
+        if ( this.element ) {
             this.element.remove();
         }
     }
