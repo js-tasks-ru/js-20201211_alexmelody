@@ -30,12 +30,12 @@ export default class NotificationMessage {
     }
 
     show(target = document.body) {
-        if (this.notification?.element) {
-            this.notification.element.remove();             // remove existing notification element from DOM
+        //if (this.notification?.element) {
+            this.notification?.element?.remove();             // remove existing notification element from DOM
             if (this.notification?.timerId) {
                 clearTimeout(this.notification.timerId);    // cancel timer of that notification element 
             }
-        }
+        //}
 
         target.append(this.element);
 
