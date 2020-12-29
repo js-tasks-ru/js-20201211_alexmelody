@@ -30,9 +30,9 @@ export default class NotificationMessage {
     }
 
     show(target = document.body) {
-        if (this.notification.element) {
+        if (this.notification?.element) {
             this.notification.element.remove();             // remove existing notification element from DOM
-            if (this.notification.timerId) {
+            if (this.notification?.timerId) {
                 clearTimeout(this.notification.timerId);    // cancel timer of that notification element 
             }
         }
@@ -48,9 +48,6 @@ export default class NotificationMessage {
 
     // this property returns information provided in the corresponding setter 
     get notification() {
-        if (NotificationMessage.exist[this.type] === undefined) {
-            NotificationMessage.exist[this.type] = {};
-        }
         return NotificationMessage.exist[this.type];
     }
 
