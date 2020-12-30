@@ -113,8 +113,8 @@ export default class SortableTable {
     
     sort(sortField = '', sortOrder = 'asc') {
         const sortColumn = this.header.find(({ id }) => id === sortField);
-
-        if ( !(sortColumn && this.compareFunction[sortColumn.sortType]) && this.sortDirection[sortOrder] ) {
+        
+        if ( !(sortColumn && this.compareFunction[sortColumn.sortType] && this.sortDirection[sortOrder]) ) {
             return;
         }
         
