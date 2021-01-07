@@ -6,19 +6,21 @@ export default class SortableTable {
         desc: -1,
     };
 
+    sortOrder = {
+        '': 'desc',      // default value if no order was specified
+        asc: 'desc',     // change asc to desc
+        desc: 'asc',     // change desc to asc    
+    }
+
     tableEventHandlers = {
         sortColumn: (event) => {
-            let column = event.target;
-
-            while(!column.dataset.id) {
-                column = column.parentElement;
-            }
+            let column = event.target.closest('[data-id]');
 
             if (column.dataset.sortable === 'false') {
                 return;
             }
 
-            this.sort(column.dataset.id, this.invertSortOrder(column.dataset.order));
+            this.sort(column.dataset.id, this.sortOrder[column.dataset.order]);
         }
     }
 
@@ -36,11 +38,7 @@ export default class SortableTable {
 
         // set default sorting
         this.sort(sortField, sortOrder);
-    }
-    
-    invertSortOrder(sortOrder) {
-        return (!sortOrder || (sortOrder === 'asc')) ? 'desc' : 'asc';
-    }
+    }    
 
     render() {
         const element = document.createElement('div');
