@@ -1,8 +1,9 @@
 export default class DraggableItem {
-    targetItem = null;
+    shiftX = 0;
+    shiftY = 0;
 
     constructor(sourceItem, itemContainer, { clientX, clientY }) {
-
+ 
         this.top = sourceItem.offsetTop + 2;   
         this.left = sourceItem.offsetLeft + 2; 
 
@@ -12,14 +13,19 @@ export default class DraggableItem {
         
         this.listItems = [...itemContainer.children];
         this.sourceItem = sourceItem;
-        this.lastItem = itemContainer.lastElementChild;
         this.itemsContainer = itemContainer;  
 
         this.render();
-
-        this.dragAt(clientX, clientY);
-
+        this.initTarget();
         this.initEventListeners();
+    }
+
+    initTarget() {
+        this.targetItem = this.sourceItem;
+        this.togglePlaceholder(this.targetItem);
+
+        this.element.style.left = this.left + 'px';
+        this.element.style.top = this.top + 'px';
     }
 
     initEventListeners() {
@@ -66,8 +72,11 @@ export default class DraggableItem {
     }
 
     dragAt(clientX, clientY) {
-        this.top += (clientY - this.clientY);
-        this.left += (clientX - this.clientX);
+        this.shiftY = clientY - this.clientY;
+        this.shiftX = clientX - this.clientX;
+
+        this.top += this.shiftY;
+        this.left += this.shiftX;
 
         this.clientX = clientX;
         this.clientY = clientY;
@@ -85,23 +94,35 @@ export default class DraggableItem {
     }
 
     togglePlaceholder(item) {
-        if (!item) {
-            return;
-        }
-
         item.classList.toggle('sortable-list__placeholder');
     }
 
-
     findTarget() {
-        let target = null;
+        return this.shiftY > 0 
+            ? this.selectTarget(this.targetItem, this.getNextItem())   // dragging down
+            : this.selectTarget(this.getPrevItem(), this.targetItem);  // dragging up      
+    }
 
-        for (const item of this.listItems) {
-            if (item.offsetTop <= this.top) {
-                target = item;
-            }
+    selectTarget(upperItem, lowerItem) {
+        if (!(upperItem && lowerItem)) {
+            return this.targetItem;
         }
-        return target;
+
+        const height = this.targetItem.getBoundingClientRect().height;
+        const dragMiddleY = this.top + height / 2;
+        const middlePoint = upperItem.offsetTop + height + (upperItem.offsetTop + height - lowerItem.offsetTop) / 2;
+        
+        return dragMiddleY > middlePoint ? lowerItem : upperItem;
+    }
+    
+    getNextItem() {
+        const item = this.targetItem.nextSibling;
+        return item === this.element ? null : item;
+    }
+
+    getPrevItem() {
+        const item = this.targetItem.previousSibling;
+        return item === this.element ? null : item;
     }
 
     remove() {
